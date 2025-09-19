@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ASM → Machine Code (16-bit)</title>
+  <style>
+    body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.35;margin:24px}
+    h1{font-size:1.2rem;margin:0 0 12px}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .card{border:1px solid #ddd;border-radius:12px;padding:14px;margin:12px 0;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+    textarea{width:100%;min-height:160px;font-family:ui-monospace,Consolas,monospace}
+    code, .mono{font-family:ui-monospace,Consolas,monospace}
+    .pill{display:inline-block;border:1px solid #ccc;border-radius:999px;padding:2px 8px;margin:0 4px 4px 0;font-size:.85rem}
+    .small{font-size:.85rem}
+    .muted{opacity:.8}
+    table{border-collapse:collapse;width:100%;font-size:.9rem}
+    th,td{border:1px solid #e8e8e8;padding:6px}
+    th{background:#fafafa;text-align:left}
+  </style>
+</head>
+<body>
+  <h1>ASM → Machine Code (from rules.json)</h1>
+
+  <div class="card">
+    <div id="rulesStatus" class="small muted">Loading rules.json…</div>
+  </div>
+
+  <div class="card">
+    <label for="asm">Assembly input (one instruction per line, e.g. <code>XOR r1,r2,r3</code>):</label>
+    <textarea id="asm" placeholder="Example&#10;NOT r1,r2&#10;XOR r3,r4,r5&#10;ROL r2,r2&#10;LDL r7,0xAB&#10;LDH r7,0x12"></textarea>
+    <div class="row" style="margin-top:8px"><button id="assembleBtn">Assemble</button></div>
+    <div id="assembleMsg" class="small muted" style="margin-top:8px"></div>
+  </div>
+
+  <div class="card">
+    <div class="row"><strong>Recognized opcodes</strong> <span id="opcodeCount" class="pill muted">0</span></div>
+    <div id="opList" class="small"></div>
+  </div>
+
+  <div class="card">
+    <div class="row"><strong>Output</strong></div>
+    <table id="outTable">
+      <thead>
+        <tr>
+          <th>#</th><th>Source</th><th>Mnemonic</th><th>Operands</th>
+          <th>Machine (hex)</th>
+          <th>Machine (binary)</th>
+          <th>Binary (1|4|seg)</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script src="MachineCodeScript.js"></script>
+</body>
+</html>
+

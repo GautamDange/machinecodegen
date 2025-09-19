@@ -1,0 +1,49 @@
+; --- Demo program: touches all instructions in the ISA ---
+
+start:
+  ; Load a couple of constants
+  LDH r1,0x12          ; r1 = 0x12xx
+  LDL r1,0x34          ; r1 = 0x1234
+  LDH r2,0x00
+  LDL r2,0x0F          ; r2 = 0x000F
+
+  ; Bitwise / logic
+  XOR r3,r1,r2         ; r3 = r1 ^ r2
+  OR  r4,r1,r2         ; r4 = r1 | r2
+  AND r5,r1,r2         ; r5 = r1 & r2
+  NOT r6,r5            ; r6 = ~r5
+
+  ; Rotates (with carry)
+  ROL r6,r6            ; r6 = (r6 << 1) | C
+  ROR r7,r6            ; r7 = (C << 15) | (r6 >> 1)
+
+  ; Add/Sub with carry/borrow
+  ADC r8,r1,r2         ; r8 = r1 + r2 + C
+  SBB r9,r1,r2         ; r9 = r1 - r2 - C
+
+  ; Memory ops
+  LDH r10,0x20
+  LDL r10,0x00         ; r10 = 0x2000 (example address)
+  STO [r10],r8         ; Mem[r10] = r8
+  LDD r11,[r10]        ; r11 = Mem[r10]
+
+  ; Control flow (absolute jumps)
+  JZ  was_zero         ; jump if Z
+  JC  had_carry        ; jump if C
+  JMP join             ; unconditional absolute jump
+
+was_zero:
+  ; Relative branch example (condition + signed offset)
+  BRA AL, +2           ; unconditional: skip next two instructions
+  LDH r0,0x00
+  LDL r0,0x01
+  JMP join
+
+had_carry:
+  BRA Z, +1            ; if zero, skip next instruction
+  NOT r0,r0
+  JMP join
+
+join:
+  BRA AL, +0           ; no-op via always-true branch
+  ; --- end ---
